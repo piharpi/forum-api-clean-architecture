@@ -1,4 +1,4 @@
-const PostThread = require('../PostThread');
+const AddThread = require('../AddThread');
 
 describe('PostThread Entity',  () => {
   it('should throw 400 error when payload not contains needed properties', () => {
@@ -8,7 +8,7 @@ describe('PostThread Entity',  () => {
     }
 
     // Action & Assert
-    expect(() => new PostThread(payload)).toThrow('POST_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddThread(payload)).toThrow('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw 400 error when payload not meet with data type specification', () => {
@@ -19,7 +19,7 @@ describe('PostThread Entity',  () => {
     }
 
     // Action & Assert
-    expect(() => new PostThread(payload)).toThrow('POST_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddThread(payload)).toThrow('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create PostThread entity correctly', () => {
@@ -30,10 +30,10 @@ describe('PostThread Entity',  () => {
     }
 
     // Action
-    const postThread = new PostThread(payload);
+    const postThread = new AddThread(payload);
 
     // Assert
-    expect(postThread).toBeInstanceOf(PostThread);
+    expect(postThread).toBeInstanceOf(AddThread);
     expect(postThread.title).toEqual('Example Thread Title');
     expect(postThread.body).toEqual('The Body of thread');
   });
