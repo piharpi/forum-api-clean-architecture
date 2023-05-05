@@ -1,13 +1,13 @@
 class AddedThread {
   constructor(payload) {
-    this.verifyPayload(payload);
+    this._verifyPayload(payload);
 
     this.id = payload.id;
     this.title = payload.title;
     this.owner = payload.owner;
   }
 
-  verifyPayload({ id, title, owner}) {
+  _verifyPayload({ id, title, owner}) {
     if(!id || !title || !owner) {
       throw new Error('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
     }

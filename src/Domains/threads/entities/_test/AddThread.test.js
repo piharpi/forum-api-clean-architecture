@@ -4,7 +4,8 @@ describe('PostThread Entity',  () => {
   it('should throw 400 error when payload not contains needed properties', () => {
     // Arrange
     const payload = {
-      title: 'Example Thread Title'
+      title: 'Example Thread Title',
+      owner: 'user-123'
     }
 
     // Action & Assert
@@ -15,7 +16,8 @@ describe('PostThread Entity',  () => {
     // Arrange
     const payload = {
       title: 'Example Thread Title',
-      body: true
+      body: true,
+      owner: 'user-123'
     }
 
     // Action & Assert
@@ -26,7 +28,8 @@ describe('PostThread Entity',  () => {
     // Arrange
     const payload = {
       title: 'Example Thread Title',
-      body: 'The Body of thread'
+      body: 'The Body of thread',
+      owner: 'user-123'
     }
 
     // Action
@@ -36,5 +39,6 @@ describe('PostThread Entity',  () => {
     expect(postThread).toBeInstanceOf(AddThread);
     expect(postThread.title).toEqual('Example Thread Title');
     expect(postThread.body).toEqual('The Body of thread');
+    expect(postThread.owner).toEqual('user-123');
   });
 });
