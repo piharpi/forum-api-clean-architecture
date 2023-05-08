@@ -1,5 +1,9 @@
 class ThreadRepository {
-  async addThread(postThread) {
+  async addThread(addThread) {
+    throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED')
+  }
+
+  async verifyAvailableTitle(title) {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED')
   }
 }
