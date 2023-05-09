@@ -17,6 +17,10 @@ describe('DomainErrorTranslator', () => {
       .toStrictEqual(new InvariantError('title dan body harus string'));
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.TITTLE_LIMIT_CHAR')))
       .toStrictEqual(new InvariantError('title melebihi batas yang ditentukan'));
+    expect(DomainErrorTranslator.translate(new Error('NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY')))
+      .toStrictEqual(new InvariantError('harus mengirimkan content'));
+    expect(DomainErrorTranslator.translate(new Error('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')))
+      .toStrictEqual(new InvariantError('content harus string'));
   });
 
   it('should return original error when error message is not needed to translate', () => {
