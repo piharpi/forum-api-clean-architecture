@@ -18,6 +18,11 @@ exports.up = pgm => {
       type: 'TEXT',
       notNull: true,
     },
+    date: {
+      type: 'TEXT',
+      notNull: true,
+      default: pgm.func('current_timestamp')
+    },
   });
 };
 
