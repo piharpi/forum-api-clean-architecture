@@ -2,7 +2,7 @@ const container = require('../src/Infrastructures/container');
 const createServer = require('../src/Infrastructures/http/createServer');
 
 const AuthenticationUtilityTestHelper  = {
-   getAccessToken: async () => {
+   getAccessToken: async ({ username = 'dummy', password= 'secret', fullname= 'Mahendrata Harpi' }) => {
     const server = await createServer(container);
 
     // add dummy user
@@ -10,9 +10,9 @@ const AuthenticationUtilityTestHelper  = {
       method: 'POST',
       url: '/users',
       payload: {
-        username: 'dummy',
-        password: 'secret',
-        fullname: 'Mahendrata Harpi'
+        username: username,
+        password: password,
+        fullname: fullname
       }
     });
 
