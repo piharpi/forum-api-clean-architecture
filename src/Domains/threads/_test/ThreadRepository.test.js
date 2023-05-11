@@ -16,4 +16,12 @@ describe('ThreadRepository Interface', () => {
     // Action & Assert
     expect(threadRepository.verifyAvailableTitle('')).rejects.toThrow('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
+
+  it('should throw error when invoke abstract behavior', () =>  {
+    // Arrange
+    const threadRepository = new ThreadRepository();
+
+    // Action & Assert
+    expect(threadRepository.checkIsThreadExist('')).rejects.toThrow('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  });
 })
