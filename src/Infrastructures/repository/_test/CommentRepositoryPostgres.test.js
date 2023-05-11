@@ -163,4 +163,36 @@ describe('CommentRepositoryPostgres', () => {
       expect(result[0].is_delete).toEqual(true);
     });
   })
+
+  describe('getDetailCommentByThreadId function', () => {
+    it('should return detail comment correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({});
+      await UsersTableTestHelper.addUser({id: 'user-1234', username: 'mulut_netizen', fullname: 'Netizen Kepo'});
+      await ThreadsTableTestHelper.addThread({});
+      await CommentsTableTestHelper.addComment({})
+      await CommentsTableTestHelper.addComment({ id: 'comment-1234', owner: 'user-1234', is_delete: true })
+
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const detailComment = await commentRepository.getAllDetailCommentByThreadId('thread-123');
+
+      // Assert
+      expect(detailComment).toHaveLength(2);
+
+      const firstComment = detailComment[0];
+      expect(firstComment.id).toEqual('comment-123');
+      expect(firstComment.username).toEqual('harpi');
+      expect(firstComment.content).toEqual('ini komentar');
+      expect(firstComment.date).toBeDefined();
+
+      const secondComment = detailComment[1];
+      expect(secondComment.id).toEqual('comment-1234');
+      expect(secondComment.username).toEqual('mulut_netizen');
+      expect(secondComment.content).toEqual('**komentar telah dihapus**');
+      expect(secondComment.date).toBeDefined();
+
+    });
+  }); 
 });

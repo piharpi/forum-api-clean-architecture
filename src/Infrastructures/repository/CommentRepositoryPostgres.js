@@ -1,6 +1,7 @@
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError')
 const AddedComment = require('../../Domains/comments/entities/AddedComment')
+const DetailComment = require('../../Domains/comments/entities/DetailComment')
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError')
 
 class CommentRepositoryPostgres extends CommentRepository {
@@ -59,6 +60,18 @@ class CommentRepositoryPostgres extends CommentRepository {
     if(commentOwnerId !== ownerId) {
       throw new AuthorizationError('anda tidak berhak mengakses resource ini')
     }
+  }
+
+  async getAllDetailCommentByThreadId(threadId){
+    const query = {
+      text: `SELECT c.id, u.username, content, c.date, is_delete 
+             FROM comments c JOIN users u ON u.id = c.owner 
+             JOIN threads t ON t.id = c.thread WHERE c.thread = $1 ORDER BY c.date ASC`,
+      values: [threadId]
+    }
+
+    const { rows } = await this._pool.query(query);
+    return rows.map((comment) => new DetailComment(comment));
   }
 }
 
