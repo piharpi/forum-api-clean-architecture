@@ -1,10 +1,13 @@
 const NewComment = require('../../Domains/comments/entities/NewComment');
 
 class AddCommentUseCase {
-  constructor({ commentRepository }) {
+  constructor({ commentRepository, threadRepository }) {
     this._commentRepository = commentRepository;
+    this._threadRepository = threadRepository
   }
   async execute(useCasePayload) {
+
+    await this._threadRepository.checkIsThreadExist(useCasePayload.thread);
     const newComment = new NewComment(useCasePayload)
 
     return this._commentRepository.addComment(newComment);
