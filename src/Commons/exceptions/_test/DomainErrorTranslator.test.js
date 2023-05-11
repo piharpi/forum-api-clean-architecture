@@ -21,6 +21,14 @@ describe('DomainErrorTranslator', () => {
       .toStrictEqual(new InvariantError('harus mengirimkan content'));
     expect(DomainErrorTranslator.translate(new Error('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')))
       .toStrictEqual(new InvariantError('content harus string'));
+    expect(DomainErrorTranslator.translate(new Error('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY')))
+      .toStrictEqual(new InvariantError('harus mengirimkan id, username, content, date, is_delete'));
+    expect(DomainErrorTranslator.translate(new Error('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')))
+      .toStrictEqual(new InvariantError('semua harus string, kecuali is_delete adalah boolean'));
+    expect(DomainErrorTranslator.translate(new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')))
+      .toStrictEqual(new InvariantError('harus mengirimkan semua property yang diperlukan'));
+    expect(DomainErrorTranslator.translate(new Error('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')))
+      .toStrictEqual(new InvariantError('semua harus string, kecuali comments adalah array'));
   });
 
   it('should return original error when error message is not needed to translate', () => {

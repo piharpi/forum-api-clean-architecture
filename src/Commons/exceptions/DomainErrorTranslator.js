@@ -22,6 +22,10 @@ DomainErrorTranslator._directories = {
   'ADD_THREAD.TITTLE_LIMIT_CHAR': new InvariantError('title melebihi batas yang ditentukan'),
   'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan content'),
   'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('content harus string'),
+  'DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan id, username, content, date, is_delete'),
+  'DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('semua harus string, kecuali is_delete adalah boolean'),
+  'DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan semua property yang diperlukan'),
+  'DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('semua harus string, kecuali comments adalah array'),
 };
 
 module.exports = DomainErrorTranslator;
