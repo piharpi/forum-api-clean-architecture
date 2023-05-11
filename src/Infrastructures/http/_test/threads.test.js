@@ -13,13 +13,13 @@ describe('/threads endpoint', () => {
 
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
-    await UsersTableTestHelper.cleanTable();
     await AuthenticationsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
   });
 
   it('should response 201 and persisted threads', async () => {
     // Arrange
-    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken();
+    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken({});
 
     const requestPayload = {
       title: 'Sebuah judul thread',
@@ -47,7 +47,7 @@ describe('/threads endpoint', () => {
 
   it('should response 400 when request payload not contain needed property', async () => {
     // Arrange
-    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken();
+    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken({});
 
     const requestPayload = {
       title: 'Ini sebuah judul',
@@ -74,7 +74,7 @@ describe('/threads endpoint', () => {
 
   it('should response 400 when request payload not meet data type specification', async () => {
     // Arrange
-    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken();
+    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken({});
 
     const requestPayload = {
       title: 'Ini sebuah Judul',
@@ -99,7 +99,7 @@ describe('/threads endpoint', () => {
 
   it('should response 400 when title more than 50 character', async () => {
     // Arrange
-    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken();
+    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken({});
 
     const requestPayload = {
       title: 'Ini sebuah judul yang sangat panjang sekali sehingga bukan seperti judul lagi yang mana tidak bisa dibaca secara sekilas',
@@ -126,7 +126,7 @@ describe('/threads endpoint', () => {
 
   it('should response 400 when title unavailable', async () => {
     // Arrange
-    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken();
+    const accessToken = await AuthenticationUtilityTestHelper.getAccessToken({});
     await UsersTableTestHelper.addUser({});
     await ThreadsTableTestHelper.addThread({});
 
@@ -177,6 +177,7 @@ describe('/threads endpoint', () => {
 
     // Assert
     const responseJson = JSON.parse(response.payload);
+    expect(responseJson.message).toBeDefined();
     expect(response.statusCode).toEqual(401);
   });
 
