@@ -6,6 +6,10 @@ class ThreadRepository {
   async verifyAvailableTitle(title) {
     throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED')
   }
+
+  async checkIsThreadExist(threadId) {
+    throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED')
+  }
 }
 
 module.exports = ThreadRepository
