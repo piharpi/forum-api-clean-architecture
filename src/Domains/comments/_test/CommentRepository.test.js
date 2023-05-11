@@ -40,4 +40,12 @@ describe('CommentRepository Interface', () => {
     // Action & Assert
     expect(commentRepository.verifyCommentOwner('')).rejects.toThrow('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
+
+  it('should throw error when invoke abstract behavior', () =>  {
+    // Arrange
+    const commentRepository = new CommentRepository();
+
+    // Action & Assert
+    expect(commentRepository.getAllDetailCommentByThreadId('')).rejects.toThrow('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  });
 })
