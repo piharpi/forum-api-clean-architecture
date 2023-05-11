@@ -2,6 +2,7 @@ const InvariantError = require('../../Commons/exceptions/InvariantError')
 const NotFoundError = require('../../Commons/exceptions/NotFoundError')
 const ThreadRepository = require('../../Domains/threads/ThreadRepository')
 const AddedThread = require("../../Domains/threads/entities/AddedThread");
+const DetailThread = require('../../Domains/threads/entities/DetailThread')
 
 class ThreadRepositoryPostgres extends ThreadRepository{
   constructor(pool, idGenerator) {
@@ -47,6 +48,19 @@ class ThreadRepositoryPostgres extends ThreadRepository{
     if (!rowCount) {
       throw new NotFoundError('thread tidak ada');
     }
+  }
+
+  async getDetailThreadById(threadId) {
+    const query = {
+      text: `SELECT t.id, title, body, date, u.username 
+             FROM threads t JOIN users u 
+             ON t.owner = u.id WHERE t.id = $1 LIMIT 1;`,
+      values: [threadId],
+    }
+
+    const { rows } = await this._pool.query(query);
+
+    return new DetailThread(rows[0]);
   }
 }
 
