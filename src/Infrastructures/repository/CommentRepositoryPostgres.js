@@ -1,5 +1,7 @@
 const CommentRepository = require('../../Domains/comments/CommentRepository');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError')
 const AddedComment = require('../../Domains/comments/entities/AddedComment')
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError')
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -19,6 +21,44 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
     return new AddedComment({ ...result.rows[0] });
+  }
+
+  async deleteComment(commentId) {
+    const query = {
+      text: 'UPDATE comments SET is_delete = true WHERE id = $1;',
+      values: [commentId]
+    }
+
+    await this._pool.query(query)
+  }
+
+  async findCommentById(commentId) {
+    const query = {
+      text: 'SELECT * FROM comments WHERE id = $1;',
+      values: [commentId]
+    }
+
+    const { rows, rowCount } = await this._pool.query(query);
+
+    return { rows, rowCount };
+  }
+
+  async checkIsCommentAvailable(commentId) {
+    const { rowCount : isAvailable } = await this.findCommentById(commentId);
+
+    if (!isAvailable) {
+        throw new NotFoundError('comment tidak ada');
+    }
+  }
+
+  async verifyCommentOwner(commentId, ownerId)  {
+    const { rows } = await this.findCommentById(commentId)
+
+    const commentOwnerId = rows[0].owner;
+
+    if(commentOwnerId !== ownerId) {
+      throw new AuthorizationError('anda tidak berhak mengakses resource ini')
+    }
   }
 }
 
