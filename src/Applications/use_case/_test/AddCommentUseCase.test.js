@@ -8,7 +8,7 @@ describe('AddCommentUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
    */
-  it('should orchestrating the add thread action correctly', async () => {
+  it('should orchestrating the add comment action correctly', async () => {
     // Arrange
     const useCasePayload = {
       content: 'ini sebuah komentar',
@@ -29,7 +29,7 @@ describe('AddCommentUseCase', () => {
     /** mocking needed function */
     mockCommentRepository.addComment = jest.fn()
       .mockImplementation(() => Promise.resolve(mockAddedComment));
-    mockThreadRepository.checkIsThreadExist = jest.fn().mockImplementation(() => Promise.resolve());
+    mockThreadRepository.checkIsThreadAvailable = jest.fn().mockImplementation(() => Promise.resolve());
 
     /** creating use case instance */
     const getCommentUseCase = new AddCommentUseCase({
