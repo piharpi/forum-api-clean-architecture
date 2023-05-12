@@ -22,6 +22,6 @@ describe('ThreadRepository Interface', () => {
     const threadRepository = new ThreadRepository();
 
     // Action & Assert
-    expect(threadRepository.checkIsThreadExist('')).rejects.toThrow('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    expect(threadRepository.checkIsThreadAvailable('')).rejects.toThrow('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 })
