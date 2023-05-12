@@ -21,8 +21,8 @@ const AuthenticationUtilityTestHelper  = {
       method: 'POST',
       url: '/authentications',
       payload: {
-        username: 'dummy',
-        password: 'secret'
+        username: username,
+        password: password,
       }
     });
 
