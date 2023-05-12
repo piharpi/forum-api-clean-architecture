@@ -2,6 +2,8 @@ const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError')
 const NewComment = require('../../../Domains/comments/entities/NewComment');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const pool = require('../../database/postgres/pool');
@@ -18,7 +20,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('addComment function', () => {
-    it('should persist add thread and return added comment correctly', async () => {
+    it('should persist add comment and return added comment correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({})
       await ThreadsTableTestHelper.addThread({})
@@ -40,7 +42,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comments).toHaveLength(1);
     });
 
-    it('should return added thread correctly', async () => {
+    it('should return added comment correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});
       await ThreadsTableTestHelper.addThread({});
@@ -66,4 +68,99 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
+  describe('findCommentById function', () => {
+    it('should return rows and rowCount when comment is available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({})
+      await ThreadsTableTestHelper.addThread({})
+      await CommentsTableTestHelper.addComment({})
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {})
+
+      // Action
+      const result = await commentRepositoryPostgres.findCommentById('comment-123');
+
+      // Assert
+      expect(result.rows).toHaveLength(1);
+      expect(result.rowCount).toEqual(1);
+    });
+
+    it('should return empty rows array and zero rowCount when comment is NOT available', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {})
+
+      // Action
+      const result = await commentRepositoryPostgres.findCommentById('comment-123');
+
+      // Assert
+      await expect(result.rows).toHaveLength(0);
+      await expect(result.rowCount).toEqual(0);
+    });
+  });
+
+  describe('checkIsCommentAvailable function',  () => {
+    it('should throw not found error when comment is not available', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {})
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.checkIsCommentAvailable('comment-123')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should resolve when comment is available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({})
+      await ThreadsTableTestHelper.addThread({})
+      await CommentsTableTestHelper.addComment({})
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {})
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.checkIsCommentAvailable('comment-123')).resolves.not.toThrowError();
+    });
+  })
+
+  describe('verifyCommentOwner function', () => {
+    it('should resolve when comment owner id is equal with user id', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({})
+      await ThreadsTableTestHelper.addThread({})
+      await CommentsTableTestHelper.addComment({})
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-123')).resolves.not.toThrowError();
+    });
+
+    it('should throw AuthorizationError when comment owner id is not equal with user id', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({})
+      await ThreadsTableTestHelper.addThread({})
+      await CommentsTableTestHelper.addComment({})
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-234')).rejects.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('deleteComment function', () => {
+    it('should delete comment correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({})
+      await ThreadsTableTestHelper.addThread({})
+      await CommentsTableTestHelper.addComment({})
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      await commentRepositoryPostgres.deleteComment('comment-123')
+
+      const result = await CommentsTableTestHelper.findCommentsById('comment-123')
+      expect(result).toHaveLength(1);
+      expect(result[0].is_delete).toBeDefined();
+      expect(result[0].is_delete).toEqual(true);
+    });
+  })
 });
