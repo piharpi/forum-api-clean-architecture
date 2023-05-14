@@ -3,7 +3,7 @@ exports.up = pgm => {
   pgm.createTable('comments', {
     id: {
       type: 'VARCHAR(50)',
-      notNull: true,
+      primaryKey: true,
     },
     content: {
       type: 'TEXT',
