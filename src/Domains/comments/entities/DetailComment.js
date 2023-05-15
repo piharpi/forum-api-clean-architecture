@@ -11,7 +11,7 @@ class DetailComment {
     this.date = date;
   }
 
-  _verifyPayload({ username, content, date, id, is_delete, replies = []}) {
+  _verifyPayload({ username, content, date, id, is_delete, replies = [] }) {
     if(!id || !content || !username || !date) {
       throw new Error('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY')
     }
@@ -21,7 +21,7 @@ class DetailComment {
       || typeof username !== 'string'
       || typeof date !== 'string'
       || typeof is_delete !== 'boolean'
-      || Array.isArray(replies) ){
+      || !Array.isArray(replies)){
       throw new Error('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')
     }
   }
