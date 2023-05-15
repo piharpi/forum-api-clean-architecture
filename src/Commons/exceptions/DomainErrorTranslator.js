@@ -30,8 +30,8 @@ DomainErrorTranslator._directories = {
   'DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('semua harus string'),
   'ADDED_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan semua property yang diperlukan'),
   'ADDED_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('semua harus string'),
-  'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan semua property yang diperlukan'),
-  'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('semua harus string'),
+  'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan content'),
+  'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('content harus string'),
 };
 
 module.exports = DomainErrorTranslator;
