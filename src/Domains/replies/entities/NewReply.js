@@ -4,8 +4,8 @@ class NewReply {
 
     this.content = payload.content;
     this.thread = payload.thread;
-    this.comment = payload.comment
-    this.owner = payload.owner
+    this.comment = payload.comment;
+    this.owner = payload.owner;
   }
 
   _verifyPayload(payload) {
