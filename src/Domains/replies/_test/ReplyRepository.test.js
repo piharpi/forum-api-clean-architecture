@@ -46,6 +46,6 @@ describe('ReplyRepository Interface', () => {
     const replyRepository = new ReplyRepository();
 
     // Action & Assert
-    expect(replyRepository.getAllDetailReplyByThreadId('')).rejects.toThrow('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    expect(replyRepository.getAllDetailReplyByThreadAndCommentId('', '')).rejects.toThrow('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 })
