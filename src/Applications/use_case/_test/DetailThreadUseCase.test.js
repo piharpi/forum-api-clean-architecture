@@ -1,5 +1,6 @@
 const DetailThreadUseCase = require('../../use_case/DetailThreadUseCase')
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
+const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 
 describe('DetailThreadUseCase', () => {
@@ -31,6 +32,21 @@ describe('DetailThreadUseCase', () => {
       }
     ]
 
+    const detailAllReplies = [
+      {
+        id: 'reply-1',
+        username: 'mulut_netizen',
+        date: '2021-08-08T07:22:33.555Z',
+        content: 'sebuah comment'
+      },
+      {
+        id: 'reply-2',
+        username: 'harpi',
+        date: '2021-08-08T07:22:33.555Z',
+        content: '**komentar telah dihapus**'
+      }
+    ]
+
     const mockThreadRepository = new ThreadRepository();
     mockThreadRepository.checkIsThreadAvailable = jest.fn().mockImplementation(() => Promise.resolve())
     mockThreadRepository.getDetailThreadById = jest.fn().mockImplementation(() => Promise.resolve(detailThread))
@@ -38,11 +54,14 @@ describe('DetailThreadUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     mockCommentRepository.getAllDetailCommentByThreadId = jest.fn().mockImplementation(() => Promise.resolve(detailAllComment))
 
+    const mockReplyRepository = new ReplyRepository();
+    mockReplyRepository.getAllDetailReplyByThreadAndCommentId = jest.fn().mockImplementation(() => Promise.resolve(detailAllReplies))
 
     // Action
     const detailThreadUseCase = new DetailThreadUseCase({
       threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository
+      commentRepository: mockCommentRepository,
+      replyRepository: mockReplyRepository
     });
 
     // Assert
@@ -50,5 +69,7 @@ describe('DetailThreadUseCase', () => {
     await expect(mockThreadRepository.checkIsThreadAvailable).toBeCalledWith(useCasePayload.threadId);
     await expect(mockThreadRepository.getDetailThreadById).toBeCalledWith(useCasePayload.threadId);
     await expect(mockCommentRepository.getAllDetailCommentByThreadId).toBeCalledWith(useCasePayload.threadId);
+    await expect(mockReplyRepository.getAllDetailReplyByThreadAndCommentId).toBeCalledWith(useCasePayload.threadId, detailAllComment[0].id);
+    await expect(mockReplyRepository.getAllDetailReplyByThreadAndCommentId).toBeCalledWith(useCasePayload.threadId, detailAllComment[1].id);
   });
 });
