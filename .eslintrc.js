@@ -14,5 +14,6 @@ module.exports = {
     "prettier/prettier": ["error"],
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
+    "no-param-reassign": ["error", { props: false }],
   },
 };
