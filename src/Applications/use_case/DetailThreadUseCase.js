@@ -6,19 +6,28 @@ class DetailThreadUseCase {
   }
 
   async execute(useCasePayload) {
-    await this._threadRepository.checkIsThreadAvailable(useCasePayload.threadId);
-    const detailThread = await this._threadRepository.getDetailThreadById(useCasePayload.threadId);
+    await this._threadRepository.checkIsThreadAvailable(
+      useCasePayload.threadId
+    );
+    const detailThread = await this._threadRepository.getDetailThreadById(
+      useCasePayload.threadId
+    );
 
-    detailThread.comments = await this._commentRepository.getAllDetailCommentByThreadId(useCasePayload.threadId);
+    detailThread.comments =
+      await this._commentRepository.getAllDetailCommentByThreadId(
+        useCasePayload.threadId
+      );
 
     for (const comment of detailThread.comments) {
       comment.replies =
-        await this._replyRepository
-          .getAllDetailReplyByThreadAndCommentId(useCasePayload.threadId, comment.id);
+        await this._replyRepository.getAllDetailReplyByThreadAndCommentId(
+          useCasePayload.threadId,
+          comment.id
+        );
     }
 
     return detailThread;
   }
 }
 
-module.exports = DetailThreadUseCase
+module.exports = DetailThreadUseCase;

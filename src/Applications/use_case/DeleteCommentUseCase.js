@@ -1,5 +1,5 @@
 class DeleteCommentUseCase {
-  constructor({ commentRepository,  threadRepository }) {
+  constructor({ commentRepository, threadRepository }) {
     this._commentRepository = commentRepository;
     this._threadRepository = threadRepository;
   }
@@ -15,7 +15,7 @@ class DeleteCommentUseCase {
     await this._commentRepository.verifyCommentOwner(commentId, ownerId);
 
     // execute soft-delete comment
-    await this._commentRepository.deleteComment(commentId)
+    await this._commentRepository.deleteComment(commentId);
   }
 }
 
