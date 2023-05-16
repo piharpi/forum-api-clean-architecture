@@ -1,31 +1,31 @@
 /* eslint-disable camelcase */
-exports.up = pgm => {
-  pgm.createTable('threads', {
+exports.up = (pgm) => {
+  pgm.createTable("threads", {
     id: {
-      type: 'VARCHAR(50)',
+      type: "VARCHAR(50)",
       primaryKey: true,
     },
     title: {
-      type: 'VARCHAR(50)',
+      type: "VARCHAR(50)",
       notNull: true,
       unique: true,
     },
     body: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     owner: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     date: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
-      default: pgm.func('current_timestamp')
+      default: pgm.func("current_timestamp"),
     },
   });
 };
 
-exports.down = pgm => {
-  pgm.dropTable('threads');
+exports.down = (pgm) => {
+  pgm.dropTable("threads");
 };

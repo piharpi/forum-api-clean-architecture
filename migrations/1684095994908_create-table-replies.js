@@ -1,36 +1,36 @@
 /* eslint-disable camelcase */
-exports.up = pgm => {
-  pgm.createTable('replies', {
+exports.up = (pgm) => {
+  pgm.createTable("replies", {
     id: {
-      type: 'VARCHAR(50)',
+      type: "VARCHAR(50)",
       primaryKey: true,
     },
     content: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     owner: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     thread: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     comment: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
     },
     date: {
-      type: 'TEXT',
+      type: "TEXT",
       notNull: true,
-      default: pgm.func('current_timestamp')
+      default: pgm.func("current_timestamp"),
     },
     is_delete: {
-      type: 'BOOLEAN',
+      type: "BOOLEAN",
       notNull: true,
       default: false,
-    }
+    },
   });
 
   pgm.addConstraint(
@@ -52,9 +52,9 @@ exports.up = pgm => {
   );
 };
 
-exports.down = pgm => {
+exports.down = (pgm) => {
   pgm.dropConstraint("replies", "fk_replies.thread_threads.id");
   pgm.dropConstraint("replies", "fk_replies.owner_users.id");
   pgm.dropConstraint("replies", "fk_replies.comment_comments.id");
-  pgm.dropTable('replies')
+  pgm.dropTable("replies");
 };
