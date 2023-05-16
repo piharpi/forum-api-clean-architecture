@@ -9,16 +9,21 @@ class NewReply {
   }
 
   _verifyPayload(payload) {
-    const { thread, content, comment, owner } = payload
+    const { thread, content, comment, owner } = payload;
 
-    if(!thread || !content || !owner || !comment) {
-      throw new Error('NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY')
+    if (!thread || !content || !owner || !comment) {
+      throw new Error("NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY");
     }
 
-    if(typeof thread !== 'string' || typeof content !== 'string' || typeof owner !== 'string' || typeof comment !== 'string') {
-      throw new Error('NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION')
+    if (
+      typeof thread !== "string" ||
+      typeof content !== "string" ||
+      typeof owner !== "string" ||
+      typeof comment !== "string"
+    ) {
+      throw new Error("NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
   }
 }
 
-module.exports = NewReply
+module.exports = NewReply;

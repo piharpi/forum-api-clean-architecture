@@ -4,24 +4,28 @@ class AddThread {
 
     this.title = payload.title;
     this.body = payload.body;
-    this.owner = payload.owner
+    this.owner = payload.owner;
   }
 
   _verifyPayload(payload) {
-    const { title, body, owner } = payload
+    const { title, body, owner } = payload;
 
-    if(!title || !body || !owner) {
-      throw new Error('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
+    if (!title || !body || !owner) {
+      throw new Error("ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY");
     }
 
-    if(typeof title !== 'string' || typeof body !== 'string' || typeof owner !== 'string') {
-      throw new Error('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
+    if (
+      typeof title !== "string" ||
+      typeof body !== "string" ||
+      typeof owner !== "string"
+    ) {
+      throw new Error("ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
 
     if (title.length > 50) {
-      throw new Error('ADD_THREAD.TITTLE_LIMIT_CHAR')
+      throw new Error("ADD_THREAD.TITTLE_LIMIT_CHAR");
     }
   }
 }
 
-module.exports = AddThread
+module.exports = AddThread;

@@ -12,19 +12,21 @@ class DetailThread {
     this.comments = comments ?? [];
   }
 
-  _verifyPayload({ id, title, body, date, username, comments = []}){
-    if(!id || !title || !body || !date) {
-      throw new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
+  _verifyPayload({ id, title, body, date, username, comments = [] }) {
+    if (!id || !title || !body || !date) {
+      throw new Error("DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY");
     }
 
-    if(typeof id !== 'string'
-      || typeof title !== 'string'
-      || typeof username !== 'string'
-      || typeof date !== 'string'
-      || !Array.isArray(comments) ){
-      throw new Error('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
+    if (
+      typeof id !== "string" ||
+      typeof title !== "string" ||
+      typeof username !== "string" ||
+      typeof date !== "string" ||
+      !Array.isArray(comments)
+    ) {
+      throw new Error("DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
   }
 }
 
-module.exports = DetailThread
+module.exports = DetailThread;
