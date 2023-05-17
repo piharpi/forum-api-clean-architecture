@@ -1,4 +1,4 @@
-const DetailThreadUseCase = require("../DetailThreadUseCase");
+const DetailThreadUseCase = require("../threads/DetailThreadUseCase");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");

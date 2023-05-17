@@ -1,5 +1,5 @@
 const AddThreadUseCase = require("../../../../Applications/use_case/threads/AddThreadUseCase");
-const DetailThreadUseCase = require("../../../../Applications/use_case/DetailThreadUseCase");
+const DetailThreadUseCase = require("../../../../Applications/use_case/threads/DetailThreadUseCase");
 
 class ThreadsHandler {
   constructor(container) {
