@@ -21,7 +21,7 @@ const ReplyRepository = require("../Domains/replies/ReplyRepository");
 const ReplyRepositoryPostgres = require("./repository/ReplyRepositoryPostgres");
 
 // use case
-const AddUserUseCase = require("../Applications/use_case/AddUserUseCase");
+const AddUserUseCase = require("../Applications/use_case/users/AddUserUseCase");
 const AuthenticationTokenManager = require("../Applications/security/AuthenticationTokenManager");
 const JwtTokenManager = require("./security/JwtTokenManager");
 const LoginUserUseCase = require("../Applications/use_case/LoginUserUseCase");
