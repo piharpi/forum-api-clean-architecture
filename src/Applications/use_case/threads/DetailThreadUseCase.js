@@ -14,22 +14,24 @@ class DetailThreadUseCase {
       useCasePayload.threadId
     );
 
-    const comments =
+    const reqComments =
       await this._commentRepository.getAllDetailCommentByThreadId(
         useCasePayload.threadId
       );
 
-    await Promise.all(
-      comments.map(async (comment) => {
-        comment.replies =
+    const comments = await Promise.all(
+      reqComments.map(async (comment) => {
+        const replies =
           await this._replyRepository.getAllDetailReplyByThreadAndCommentId(
             useCasePayload.threadId,
             comment.id
           );
+
+        return { ...comment, replies };
       })
     );
 
-    detailThread.comments = comments;
+    // detailThread.comments = comments;
 
     // another solution but not recommended
     // for (const comment of detailThread.comments) {
@@ -40,7 +42,7 @@ class DetailThreadUseCase {
     //     );
     // }
 
-    return detailThread;
+    return { ...detailThread, comments };
   }
 }
 
