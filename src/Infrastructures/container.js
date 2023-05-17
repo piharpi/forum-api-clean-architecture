@@ -33,7 +33,7 @@ const AddThreadUseCase = require("../Applications/use_case/AddThreadUseCase");
 const AddCommentUseCase = require("../Applications/use_case/comments/AddCommentUseCase");
 const DeleteCommentUseCase = require("../Applications/use_case/comments/DeleteCommentUseCase");
 const DetailThreadUseCase = require("../Applications/use_case/DetailThreadUseCase");
-const AddReplyUseCase = require("../Applications/use_case/AddReplyUseCase");
+const AddReplyUseCase = require("../Applications/use_case/replies/AddReplyUseCase");
 const DeleteReplyUseCase = require("../Applications/use_case/DeleteReplyUseCase");
 
 // creating container

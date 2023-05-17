@@ -3,7 +3,7 @@ const AddedReply = require("../../../Domains/replies/entities/AddedReply");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
-const AddReplyUseCase = require("../AddReplyUseCase");
+const AddReplyUseCase = require("../replies/AddReplyUseCase");
 
 describe("AddReplyUseCase", () => {
   /**
