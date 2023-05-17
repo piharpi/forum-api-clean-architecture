@@ -1,4 +1,4 @@
-const LoginUserUseCase = require("../../../../Applications/use_case/LoginUserUseCase");
+const LoginUserUseCase = require("../../../../Applications/use_case/authentications/LoginUserUseCase");
 const RefreshAuthenticationUseCase = require("../../../../Applications/use_case/authentications/RefreshAuthenticationUseCase");
 const LogoutUserUseCase = require("../../../../Applications/use_case/LogoutUserUseCase");
 

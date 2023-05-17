@@ -2,7 +2,7 @@ const UserRepository = require("../../../Domains/users/UserRepository");
 const AuthenticationRepository = require("../../../Domains/authentications/AuthenticationRepository");
 const AuthenticationTokenManager = require("../../security/AuthenticationTokenManager");
 const PasswordHash = require("../../security/PasswordHash");
-const LoginUserUseCase = require("../LoginUserUseCase");
+const LoginUserUseCase = require("../authentications/LoginUserUseCase");
 const NewAuth = require("../../../Domains/authentications/entities/NewAuth");
 
 describe("GetAuthenticationUseCase", () => {
