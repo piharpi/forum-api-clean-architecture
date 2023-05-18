@@ -25,9 +25,6 @@ describe("AddThreadUseCase", () => {
     const mockThreadRepository = new ThreadRepository();
 
     /** mocking needed function */
-    mockThreadRepository.verifyAvailableTitle = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
     mockThreadRepository.addThread = jest
       .fn()
       .mockImplementation(() => Promise.resolve(mockAddedThread));
@@ -47,10 +44,6 @@ describe("AddThreadUseCase", () => {
         title: useCasePayload.title,
         owner: useCasePayload.owner,
       })
-    );
-
-    expect(mockThreadRepository.verifyAvailableTitle).toBeCalledWith(
-      useCasePayload.title
     );
     expect(mockThreadRepository.addThread).toBeCalledWith(
       new AddThread({
