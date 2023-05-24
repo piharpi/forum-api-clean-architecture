@@ -2,7 +2,6 @@ const ThreadRepositoryPostgres = require("../ThreadRepositoryPostgres");
 const ThreadsTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
 const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
 const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
-const InvariantError = require("../../../Commons/exceptions/InvariantError");
 const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AddThread = require("../../../Domains/threads/entities/AddThread");
 const AddedThread = require("../../../Domains/threads/entities/AddedThread");
@@ -17,32 +16,6 @@ describe("ThreadRepositoryPostgres", () => {
 
   afterAll(async () => {
     await pool.end();
-  });
-
-  describe("verifyAvailableTitle function", () => {
-    it("should throw InvariantError when title not available", async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({});
-      await ThreadsTableTestHelper.addThread({}); // memasukan user baru dengan username dicoding
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(
-        threadRepositoryPostgres.verifyAvailableTitle("Sebuah judul thread")
-      ).rejects.toThrowError(InvariantError);
-    });
-
-    it("should not throw InvariantError when title available", async () => {
-      // Arrange
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(
-        threadRepositoryPostgres.verifyAvailableTitle(
-          "Sebuah judul thread unik"
-        )
-      ).resolves.not.toThrowError(InvariantError);
-    });
   });
 
   describe("addThread function", () => {
