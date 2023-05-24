@@ -28,6 +28,20 @@ describe("PostThread Entity", () => {
     );
   });
 
+  it("should throw 400 error when title length is greater than 50", () => {
+    // Arrange
+    const payload = {
+      title: "Super duper long title than didn't exist in real case",
+      body: "Simple body content",
+      owner: "user-123",
+    };
+
+    // Action & Assert
+    expect(() => new AddThread(payload)).toThrow(
+      "ADD_THREAD.TITTLE_LIMIT_CHAR"
+    );
+  });
+
   it("should create PostThread entity correctly", () => {
     // Arrange
     const payload = {
