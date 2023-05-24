@@ -16,16 +16,6 @@ describe("ThreadRepository Interface", () => {
     const threadRepository = new ThreadRepository();
 
     // Action & Assert
-    expect(threadRepository.verifyAvailableTitle("")).rejects.toThrow(
-      "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED"
-    );
-  });
-
-  it("should throw error when invoke abstract behavior", () => {
-    // Arrange
-    const threadRepository = new ThreadRepository();
-
-    // Action & Assert
     expect(threadRepository.checkIsThreadAvailable("")).rejects.toThrow(
       "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED"
     );
