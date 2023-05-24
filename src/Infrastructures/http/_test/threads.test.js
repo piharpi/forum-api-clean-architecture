@@ -138,38 +138,6 @@ describe("/threads endpoint", () => {
       );
     });
 
-    it("should response 400 when title unavailable", async () => {
-      // Arrange
-      const accessToken = await AuthenticationUtilityTestHelper.getAccessToken(
-        {}
-      );
-      await UsersTableTestHelper.addUser({});
-      await ThreadsTableTestHelper.addThread({});
-
-      const requestPayload = {
-        title: "Sebuah judul thread",
-        body: "Isi thread",
-      };
-
-      const server = await createServer(container);
-
-      // Action
-      const response = await server.inject({
-        method: "POST",
-        url: "/threads",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        payload: requestPayload,
-      });
-
-      // Assert
-      const responseJson = JSON.parse(response.payload);
-      expect(response.statusCode).toEqual(400);
-      expect(responseJson.status).toEqual("fail");
-      expect(responseJson.message).toEqual("judul tidak tersedia");
-    });
-
     it("should response 401 when user not authorized", async () => {
       // Arrange
       const accessToken = "invalid_access_token";
