@@ -8,11 +8,12 @@ const CommentsTableTestHelper = {
     content = "ini komentar",
     thread = "thread-123",
     owner = "user-123",
+    date = new Date().toISOString(),
     is_delete = false,
   }) {
     const query = {
-      text: "INSERT INTO comments(id, content, owner, thread, is_delete) VALUES($1, $2, $3, $4, $5);",
-      values: [id, content, owner, thread, is_delete],
+      text: "INSERT INTO comments(id, content, owner, thread, date, is_delete) VALUES($1, $2, $3, $4, $5, $6);",
+      values: [id, content, owner, thread, date, is_delete],
     };
 
     await pool.query(query);
@@ -20,7 +21,7 @@ const CommentsTableTestHelper = {
 
   async findCommentsById(id) {
     const query = {
-      text: "SELECT * FROM comments WHERE id = $1",
+      text: "SELECT * M comments WHERE id = $1",
       values: [id],
     };
     const result = await pool.query(query);

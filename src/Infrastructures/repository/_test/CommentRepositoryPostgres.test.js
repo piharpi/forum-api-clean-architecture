@@ -7,6 +7,7 @@ const AuthorizationError = require("../../../Commons/exceptions/AuthorizationErr
 const NewComment = require("../../../Domains/comments/entities/NewComment");
 const AddedComment = require("../../../Domains/comments/entities/AddedComment");
 const pool = require("../../database/postgres/pool");
+const DetailComment = require("../../../Domains/comments/entities/DetailComment");
 
 describe("CommentRepositoryPostgres", () => {
   afterEach(async () => {
@@ -200,10 +201,13 @@ describe("CommentRepositoryPostgres", () => {
         fullname: "Netizen Kepo",
       });
       await ThreadsTableTestHelper.addThread({});
-      await CommentsTableTestHelper.addComment({});
+      await CommentsTableTestHelper.addComment({
+        date: "2023-05-25T13:40:47.337Z",
+      });
       await CommentsTableTestHelper.addComment({
         id: "comment-1234",
         owner: "user-1234",
+        date: "2023-05-25T13:41:17.929Z",
         is_delete: true,
       });
 
@@ -216,17 +220,22 @@ describe("CommentRepositoryPostgres", () => {
       // Assert
       expect(detailComment).toHaveLength(2);
 
-      const firstComment = detailComment[0];
-      expect(firstComment.id).toEqual("comment-123");
-      expect(firstComment.username).toEqual("harpi");
-      expect(firstComment.content).toEqual("ini komentar");
-      expect(firstComment.date).toBeDefined();
-
-      const secondComment = detailComment[1];
-      expect(secondComment.id).toEqual("comment-1234");
-      expect(secondComment.username).toEqual("mulut_netizen");
-      expect(secondComment.content).toEqual("**komentar telah dihapus**");
-      expect(secondComment.date).toBeDefined();
+      expect(detailComment).toStrictEqual([
+        new DetailComment({
+          username: "harpi",
+          content: "ini komentar",
+          date: "2023-05-25T13:40:47.337Z",
+          id: "comment-123",
+          is_delete: false,
+        }),
+        new DetailComment({
+          username: "mulut_netizen",
+          content: "**komentar telah dihapus**`",
+          date: "2023-05-25T13:41:17.929Z",
+          id: "comment-1234",
+          is_delete: true,
+        }),
+      ]);
     });
   });
 });
