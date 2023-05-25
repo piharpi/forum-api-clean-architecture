@@ -1,3 +1,6 @@
+const DetailThread = require("../../../Domains/threads/entities/DetailThread");
+const DetailComment = require("../../../Domains/comments/entities/DetailComment");
+const DetailReply = require("../../../Domains/replies/entities/DetailReply");
 const DetailThreadUseCase = require("../threads/DetailThreadUseCase");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
@@ -8,43 +11,46 @@ describe("DetailThreadUseCase", () => {
     // Arrange
     const useCasePayload = { threadId: "thread-123" };
 
-    const detailThread = {
+    const expectDetailThread = new DetailThread({
       id: "thread-123",
       title: "sebuah thread",
       body: "sebuah body thread",
       date: "2021-08-08T07:19:09.775Z",
       username: "harpi",
-      comments: [],
-    };
+    });
 
-    const detailAllComment = [
-      {
+    const expectDetailAllComment = [
+      new DetailComment({
         id: "comment-123",
         username: "harpi",
         date: "2021-08-08T07:22:33.555Z",
-        content: "sebuah comment",
-      },
-      {
+        is_delete: false,
+        content: "isi komentar",
+      }),
+      new DetailComment({
         id: "comment-1234",
         username: "mulut_netizen",
-        date: "2021-08-08T07:22:33.555Z",
-        content: "**komentar telah dihapus**",
-      },
+        date: "2021-08-08T07:24:33.555Z",
+        is_delete: true,
+        content: "isi komentar",
+      }),
     ];
 
-    const detailAllReplies = [
-      {
+    const expectDetailAllReplies = [
+      new DetailReply({
         id: "reply-1",
         username: "mulut_netizen",
-        date: "2021-08-08T07:22:33.555Z",
-        content: "sebuah comment",
-      },
-      {
+        is_delete: false,
+        date: "2021-08-08T07:29:33.555Z",
+        content: "sebuah reply",
+      }),
+      new DetailReply({
         id: "reply-2",
         username: "harpi",
-        date: "2021-08-08T07:22:33.555Z",
-        content: "**komentar telah dihapus**",
-      },
+        date: "2021-08-08T07:37:33.555Z",
+        is_delete: false,
+        content: "sebuah reply",
+      }),
     ];
 
     const mockThreadRepository = new ThreadRepository();
@@ -53,17 +59,61 @@ describe("DetailThreadUseCase", () => {
       .mockImplementation(() => Promise.resolve());
     mockThreadRepository.getDetailThreadById = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(detailThread));
+      .mockImplementation(() =>
+        Promise.resolve(
+          new DetailThread({
+            id: "thread-123",
+            title: "sebuah thread",
+            body: "sebuah body thread",
+            date: "2021-08-08T07:19:09.775Z",
+            username: "harpi",
+          })
+        )
+      );
 
     const mockCommentRepository = new CommentRepository();
     mockCommentRepository.getAllDetailCommentByThreadId = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(detailAllComment));
+      .mockImplementation(() =>
+        Promise.resolve([
+          new DetailComment({
+            id: "comment-123",
+            username: "harpi",
+            date: "2021-08-08T07:22:33.555Z",
+            is_delete: false,
+            content: "isi komentar",
+          }),
+          new DetailComment({
+            id: "comment-1234",
+            username: "mulut_netizen",
+            date: "2021-08-08T07:24:33.555Z",
+            is_delete: true,
+            content: "isi komentar",
+          }),
+        ])
+      );
 
     const mockReplyRepository = new ReplyRepository();
     mockReplyRepository.getAllDetailReplyByThreadAndCommentId = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(detailAllReplies));
+      .mockImplementation(() =>
+        Promise.resolve([
+          new DetailReply({
+            id: "reply-1",
+            username: "mulut_netizen",
+            is_delete: false,
+            date: "2021-08-08T07:29:33.555Z",
+            content: "sebuah reply",
+          }),
+          new DetailReply({
+            id: "reply-2",
+            username: "harpi",
+            date: "2021-08-08T07:37:33.555Z",
+            is_delete: false,
+            content: "sebuah reply",
+          }),
+        ])
+      );
 
     // Action
     const detailThreadUseCase = new DetailThreadUseCase({
@@ -73,9 +123,11 @@ describe("DetailThreadUseCase", () => {
     });
 
     // Assert
-    await expect(
-      detailThreadUseCase.execute(useCasePayload)
-    ).resolves.not.toThrowError(Error);
+    const detailThreadUseCaseResult = await detailThreadUseCase.execute(
+      useCasePayload
+    );
+
+    expect(detailThreadUseCaseResult).toBeInstanceOf(DetailThread);
     await expect(mockThreadRepository.checkIsThreadAvailable).toBeCalledWith(
       useCasePayload.threadId
     );
@@ -87,9 +139,19 @@ describe("DetailThreadUseCase", () => {
     ).toBeCalledWith(useCasePayload.threadId);
     await expect(
       mockReplyRepository.getAllDetailReplyByThreadAndCommentId
-    ).toBeCalledWith(useCasePayload.threadId, detailAllComment[0].id);
+    ).toBeCalledWith(useCasePayload.threadId, expectDetailAllComment[0].id);
     await expect(
       mockReplyRepository.getAllDetailReplyByThreadAndCommentId
-    ).toBeCalledWith(useCasePayload.threadId, detailAllComment[1].id);
+    ).toBeCalledWith(useCasePayload.threadId, expectDetailAllComment[1].id);
+
+    expect(detailThreadUseCaseResult).toStrictEqual(
+      new DetailThread({
+        ...expectDetailThread,
+        comments: [
+          { ...expectDetailAllComment[0], replies: expectDetailAllReplies },
+          { ...expectDetailAllComment[1], replies: expectDetailAllReplies },
+        ],
+      })
+    );
   });
 });
