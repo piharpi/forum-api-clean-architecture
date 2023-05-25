@@ -7,6 +7,7 @@ const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
 const NewReply = require("../../../Domains/replies/entities/NewReply");
 const AddedReply = require("../../../Domains/replies/entities/AddedReply");
+const DetailReply = require("../../../Domains/replies/entities/DetailReply");
 const pool = require("../../database/postgres/pool");
 
 describe("ReplyRepositoryPostgres", () => {
@@ -203,10 +204,15 @@ describe("ReplyRepositoryPostgres", () => {
       });
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({ user: "user-1234" });
-      await RepliesTableTestHelper.addReply({ id: "reply-1", is_delete: true });
+      await RepliesTableTestHelper.addReply({
+        id: "reply-1",
+        is_delete: true,
+        date: "2023-05-25T14:19:02.781Z",
+      });
       await RepliesTableTestHelper.addReply({
         id: "reply-2",
         owner: "user-1234",
+        date: "2023-05-25T14:19:22.781Z",
       });
 
       const replyRepository = new ReplyRepositoryPostgres(pool, {});
@@ -221,17 +227,22 @@ describe("ReplyRepositoryPostgres", () => {
       // Assert
       expect(detailReply).toHaveLength(2);
 
-      const firstReply = detailReply[0];
-      expect(firstReply.id).toEqual("reply-1");
-      expect(firstReply.username).toEqual("harpi");
-      expect(firstReply.content).toEqual("**balasan telah dihapus**");
-      expect(firstReply.date).toBeDefined();
-
-      const secondReply = detailReply[1];
-      expect(secondReply.id).toEqual("reply-2");
-      expect(secondReply.username).toEqual("mulut_netizen");
-      expect(secondReply.content).toEqual("ini balasan");
-      expect(secondReply.date).toBeDefined();
+      expect(detailReply).toStrictEqual([
+        new DetailReply({
+          id: "reply-1",
+          username: "harpi",
+          is_delete: true,
+          content: "**balasan telah dihapus**",
+          date: "2023-05-25T14:19:02.781Z",
+        }),
+        new DetailReply({
+          id: "reply-2",
+          username: "mulut_netizen",
+          is_delete: false,
+          content: "ini balasan",
+          date: "2023-05-25T14:19:22.781Z",
+        }),
+      ]);
     });
   });
 });
