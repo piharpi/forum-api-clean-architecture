@@ -6,6 +6,7 @@ const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AddThread = require("../../../Domains/threads/entities/AddThread");
 const AddedThread = require("../../../Domains/threads/entities/AddedThread");
 const pool = require("../../database/postgres/pool");
+const DetailThread = require("../../../Domains/threads/entities/DetailThread");
 
 describe("ThreadRepositoryPostgres", () => {
   afterEach(async () => {
@@ -100,7 +101,9 @@ describe("ThreadRepositoryPostgres", () => {
     it("should return detail thread correctly", async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});
-      await ThreadsTableTestHelper.addThread({});
+      await ThreadsTableTestHelper.addThread({
+        date: "2023-05-25T14:14:02.781Z",
+      });
 
       const threadRepository = new ThreadRepositoryPostgres(pool, {});
 
@@ -110,11 +113,16 @@ describe("ThreadRepositoryPostgres", () => {
       );
 
       // Assert
-      expect(detailThread.id).toEqual("thread-123");
-      expect(detailThread.date).toBeDefined();
-      expect(detailThread.title).toEqual("Sebuah judul thread");
-      expect(detailThread.body).toEqual("Isi thread");
-      expect(detailThread.username).toEqual("harpi");
+      expect(detailThread).toStrictEqual(
+        new DetailThread({
+          id: "thread-123",
+          title: "Sebuah judul thread",
+          body: "Isi thread",
+          date: "2023-05-25T14:14:02.781Z",
+          username: "harpi",
+        })
+      );
+
       expect(detailThread.comments).toBeDefined();
     });
   });
