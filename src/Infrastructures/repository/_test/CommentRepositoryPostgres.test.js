@@ -236,6 +236,9 @@ describe("CommentRepositoryPostgres", () => {
           is_delete: true,
         }),
       ]);
+
+      expect(detailComment[0].replies).toBeDefined();
+      expect(detailComment[1].replies).toBeDefined();
     });
   });
 });
