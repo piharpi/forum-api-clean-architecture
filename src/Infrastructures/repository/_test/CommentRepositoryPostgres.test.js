@@ -218,8 +218,6 @@ describe("CommentRepositoryPostgres", () => {
         await commentRepository.getAllDetailCommentByThreadId("thread-123");
 
       // Assert
-      expect(detailComment).toHaveLength(2);
-
       expect(detailComment).toStrictEqual([
         new DetailComment({
           username: "harpi",
