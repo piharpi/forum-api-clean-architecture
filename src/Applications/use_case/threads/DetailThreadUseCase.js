@@ -1,4 +1,5 @@
 const DetailThread = require("../../../Domains/threads/entities/DetailThread");
+const DetailReply = require("../../../Domains/replies/entities/DetailReply");
 
 class DetailThreadUseCase {
   constructor({ threadRepository, commentRepository, replyRepository }) {
@@ -21,17 +22,33 @@ class DetailThreadUseCase {
         useCasePayload.threadId
       );
 
-    const comments = await Promise.all(
-      reqComments.map(async (comment) => {
-        const replies =
-          await this._replyRepository.getAllDetailReplyByThreadAndCommentId(
-            useCasePayload.threadId,
-            comment.id
-          );
+    const commentIds = reqComments.map((c) => c.id);
 
-        return { ...comment, replies };
-      })
-    );
+    const reqReplies =
+      await this._replyRepository.getAllDetailReplyByThreadAndCommentId(
+        useCasePayload.threadId,
+        commentIds
+      );
+
+    const comments = reqComments.map((comment) => {
+      const replies = reqReplies
+        .filter((r) => r.comment === comment.id)
+        .map((r) => new DetailReply(r));
+
+      return { ...comment, replies };
+    });
+
+    // const comments = await Promise.all(
+    //   reqComments.map(async (comment) => {
+    //     const replies =
+    //       await this._replyRepository.getAllDetailReplyByThreadAndCommentId(
+    //         useCasePayload.threadId,
+    //         comment.id
+    //       );
+    //
+    //     return { ...comment, replies };
+    //   })
+    // );
 
     // detailThread.comments = comments;
 

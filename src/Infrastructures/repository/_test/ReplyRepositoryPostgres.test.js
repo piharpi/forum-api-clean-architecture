@@ -7,7 +7,7 @@ const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
 const NewReply = require("../../../Domains/replies/entities/NewReply");
 const AddedReply = require("../../../Domains/replies/entities/AddedReply");
-const DetailReply = require("../../../Domains/replies/entities/DetailReply");
+// const DetailReply = require("../../../Domains/replies/entities/DetailReply");
 const pool = require("../../database/postgres/pool");
 
 describe("ReplyRepositoryPostgres", () => {
@@ -194,6 +194,56 @@ describe("ReplyRepositoryPostgres", () => {
   });
 
   describe("getAllDetailReplyByThreadAndCommentId function", () => {
+    // it("should return detail reply correctly", async () => {
+    //   // Arrange
+    //   await UsersTableTestHelper.addUser({});
+    //   await UsersTableTestHelper.addUser({
+    //     id: "user-1234",
+    //     username: "mulut_netizen",
+    //     fullname: "Netizen Kepo",
+    //   });
+    //   await ThreadsTableTestHelper.addThread({});
+    //   await CommentsTableTestHelper.addComment({ user: "user-1234" });
+    //   await RepliesTableTestHelper.addReply({
+    //     id: "reply-1",
+    //     is_delete: true,
+    //     date: "2023-05-25T14:19:02.781Z",
+    //   });
+    //   await RepliesTableTestHelper.addReply({
+    //     id: "reply-2",
+    //     owner: "user-1234",
+    //     date: "2023-05-25T14:19:22.781Z",
+    //   });
+    //
+    //   const replyRepository = new ReplyRepositoryPostgres(pool, {});
+    //
+    //   // Action
+    //   const detailReply =
+    //     await replyRepository.getAllDetailReplyByThreadAndCommentId(
+    //       "thread-123",
+    //       "comment-123"
+    //     );
+    //
+    //   // Assert
+    //   expect(detailReply).toHaveLength(2);
+    //
+    //   expect(detailReply).toStrictEqual([
+    //     new DetailReply({
+    //       id: "reply-1",
+    //       username: "harpi",
+    //       is_delete: true,
+    //       content: "**balasan telah dihapus**",
+    //       date: "2023-05-25T14:19:02.781Z",
+    //     }),
+    //     new DetailReply({
+    //       id: "reply-2",
+    //       username: "mulut_netizen",
+    //       is_delete: false,
+    //       content: "ini balasan",
+    //       date: "2023-05-25T14:19:22.781Z",
+    //     }),
+    //   ]);
+    // });
     it("should return detail reply correctly", async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});
@@ -221,27 +271,27 @@ describe("ReplyRepositoryPostgres", () => {
       const detailReply =
         await replyRepository.getAllDetailReplyByThreadAndCommentId(
           "thread-123",
-          "comment-123"
+          ["comment-123"]
         );
 
       // Assert
-      expect(detailReply).toHaveLength(2);
-
       expect(detailReply).toStrictEqual([
-        new DetailReply({
+        {
           id: "reply-1",
           username: "harpi",
           is_delete: true,
-          content: "**balasan telah dihapus**",
+          content: "ini balasan",
+          comment: "comment-123",
           date: "2023-05-25T14:19:02.781Z",
-        }),
-        new DetailReply({
+        },
+        {
           id: "reply-2",
           username: "mulut_netizen",
           is_delete: false,
           content: "ini balasan",
+          comment: "comment-123",
           date: "2023-05-25T14:19:22.781Z",
-        }),
+        },
       ]);
     });
   });

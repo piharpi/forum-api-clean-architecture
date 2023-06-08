@@ -12,27 +12,31 @@ describe("ThreadRepositoryPostgres", () => {
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
-    await UsersTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
+    await UsersTableTestHelper.cleanTable();
     await pool.end();
   });
+
+  beforeAll(async () => {
+    await UsersTableTestHelper.addUser({});
+  });
+
+  const fakeIdGenerator = () => "123"; // stub!
+  const threadRepositoryPostgres = new ThreadRepositoryPostgres(
+    pool,
+    fakeIdGenerator
+  );
 
   describe("addThread function", () => {
     it("should persist add thread and return added thread correctly", async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({});
       const addThread = new AddThread({
         title: "Ini judul thread",
         body: "Isi thread",
         owner: "user-123",
       });
-      const fakeIdGenerator = () => "123"; // stub!
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
 
       // Action
       await threadRepositoryPostgres.addThread(addThread);
@@ -46,17 +50,11 @@ describe("ThreadRepositoryPostgres", () => {
 
     it("should return added thread correctly", async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({});
       const addThread = new AddThread({
         title: "Ini judul thread",
         body: "Isi thread",
         owner: "user-123",
       });
-      const fakeIdGenerator = () => "123"; // stub!
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
 
       // Action
       const addedThread = await threadRepositoryPostgres.addThread(addThread);
@@ -74,9 +72,6 @@ describe("ThreadRepositoryPostgres", () => {
 
   describe("checkIsThreadExist function", () => {
     it("should throw error not found when thread not exist", async () => {
-      // Arrange
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
       // Action & Assert
       await expect(
         threadRepositoryPostgres.checkIsThreadAvailable("thread-123")
@@ -85,10 +80,7 @@ describe("ThreadRepositoryPostgres", () => {
 
     it("should resolve when thread is exist", async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({});
       await ThreadsTableTestHelper.addThread({});
-
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
       await expect(
@@ -100,15 +92,12 @@ describe("ThreadRepositoryPostgres", () => {
   describe("getDetailThreadById", () => {
     it("should return detail thread correctly", async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({});
       await ThreadsTableTestHelper.addThread({
         date: "2023-05-25T14:14:02.781Z",
       });
 
-      const threadRepository = new ThreadRepositoryPostgres(pool, {});
-
       // Action
-      const detailThread = await threadRepository.getDetailThreadById(
+      const detailThread = await threadRepositoryPostgres.getDetailThreadById(
         "thread-123"
       );
 

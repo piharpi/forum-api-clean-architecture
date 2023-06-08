@@ -1,7 +1,7 @@
 const ReplyRepository = require("../../Domains/replies/ReplyRepository");
 const NotFoundError = require("../../Commons/exceptions/NotFoundError");
 const AddedReply = require("../../Domains/replies/entities/AddedReply");
-const DetailReply = require("../../Domains/replies/entities/DetailReply");
+// const DetailReply = require("../../Domains/replies/entities/DetailReply");
 const AuthorizationError = require("../../Commons/exceptions/AuthorizationError");
 
 class ReplyRepositoryPostgres extends ReplyRepository {
@@ -62,19 +62,33 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     }
   }
 
-  async getAllDetailReplyByThreadAndCommentId(threadId, commentId) {
+  async getAllDetailReplyByThreadAndCommentId(threadId, commentIds) {
     const query = {
-      text: `SELECT r.id, u.username, r.content, r.date, r.is_delete 
+      text: `SELECT r.id, u.username, r.content, r.date, r.is_delete, r.comment
              FROM replies r JOIN users u ON u.id = r.owner 
              JOIN threads t ON t.id = r.thread
              JOIN comments c ON c.id = r.comment 
-             WHERE r.thread = $1 AND r.comment = $2 ORDER BY r.date ASC`,
-      values: [threadId, commentId],
+             WHERE r.thread = $1 AND r.comment = ANY($2::text[]) ORDER BY r.date ASC`,
+      values: [threadId, commentIds],
     };
 
     const { rows } = await this._pool.query(query);
-    return rows.map((reply) => new DetailReply(reply));
+    return rows;
   }
+
+  // async getAllDetailReplyByThreadAndCommentId(threadId, commentId) {
+  //   const query = {
+  //     text: `SELECT r.id, u.username, r.content, r.date, r.is_delete
+  //            FROM replies r JOIN users u ON u.id = r.owner
+  //            JOIN threads t ON t.id = r.thread
+  //            JOIN comments c ON c.id = r.comment
+  //            WHERE r.thread = $1 AND r.comment = $2 ORDER BY r.date ASC`,
+  //     values: [threadId, commentId],
+  //   };
+  //
+  //   const { rows } = await this._pool.query(query);
+  //   return rows.map((reply) => new DetailReply(reply));
+  // }
 }
 
 module.exports = ReplyRepositoryPostgres;
