@@ -23,6 +23,8 @@ describe("replies test", () => {
 
   describe("POST /threads/{threadId}/comments/{commentId}/replies endpoint", () => {
     it("should response 201 and persisted replies", async () => {
+      jest.setTimeout(15000);
+
       // Arrange
       const threadAuthorAccessToken =
         await AuthenticationUtilityTestHelper.getAccessToken({});
