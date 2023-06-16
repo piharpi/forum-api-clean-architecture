@@ -9,11 +9,34 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_HOST: ${{ secrets.PGHOST_TEST }}
+          POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
+          POSTGRES_USERNAME: ${{ secrets.PGUSERNAME_TEST }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+        ports:
+          - ${{ secrets.PGPORT_TEST}}:${{ secrets.PGPORT_TEST}}
+
     strategy:
       matrix:
         node-version: [14.21.3]
 
     steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Drop testing database
+        run: psql -U ${{ secrets.PGUSERNAME_TEST }} -c "DROP DATABASE ${{ secrets.PGDATABASE_TEST }}"
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+      - name: Create testing database
+        run: psql -U ${{ secrets.PGUSERNAME_TEST }} -c "CREATE DATABASE ${{ secrets.PGDATABASE_TEST }}"
+        env:
+          POSTGRES_PASSWORD:  ${{ secrets.PGPASSWORD_TEST }}
       - uses: actions/checkout@v3
       - name: Use Node.Js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -24,18 +47,17 @@ jobs:
           npm install
           npm run migrate up
           npm run test
-
         env:
           CI: true
           PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
-          PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
-          PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
-          PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
           PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
+          PGUSER_TEST: ${{ secrets.PGUSERNAME_TEST }}
+          PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
+          PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
           PGHOST: ${{ secrets.PGHOST_TEST }}
-          PGUSER: ${{ secrets.PGUSER_TEST }}
-          PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
           PGPORT: ${{ secrets.PGPORT_TEST }}
+          PGUSER: ${{ secrets.PGUSERNAME_TEST }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+          PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
           ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
           REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
