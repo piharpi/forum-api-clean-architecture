@@ -38,7 +38,7 @@ describe("HTTP server", () => {
     expect(responseJson.message).toEqual("terjadi kegagalan pada server kami");
   });
 
-  describe("when request GET /", () => {
+  describe("when req GET /", () => {
     it("should return 200 and hello world", async () => {
       // Arrange
       const server = await createServer({});
