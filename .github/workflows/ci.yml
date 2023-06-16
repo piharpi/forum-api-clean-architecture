@@ -13,28 +13,15 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_HOST: ${{ secrets.PGHOST_TEST }}
-          POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
           POSTGRES_USERNAME: ${{ secrets.PGUSERNAME_TEST }}
           POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+          POSTGRES_DB: ${{ secrets.PGDATABASE_TEST }}
 
     strategy:
       matrix:
         node-version: [14.21.3]
 
     steps:
-      - name: Install PostgreSQL client
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-client
-      - name: Drop testing database
-        run: psql -U ${{ secrets.PGUSERNAME_TEST }} -c "DROP DATABASE ${{ secrets.PGDATABASE_TEST }}"
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
-      - name: Create testing database
-        run: psql -U ${{ secrets.PGUSERNAME_TEST }} -c "CREATE DATABASE ${{ secrets.PGDATABASE_TEST }}"
-        env:
-          POSTGRES_PASSWORD:  ${{ secrets.PGPASSWORD_TEST }}
       - uses: actions/checkout@v3
       - name: Use Node.Js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
