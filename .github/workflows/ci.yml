@@ -25,8 +25,8 @@ jobs:
     steps:
       - name: Install PostgreSQL client
         run: |
-          apt-get update
-          apt-get install --yes postgresql-client
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
       - name: Drop testing database
         run: psql -U ${{ secrets.PGUSERNAME_TEST }} -c "DROP DATABASE ${{ secrets.PGDATABASE_TEST }}"
         env:
