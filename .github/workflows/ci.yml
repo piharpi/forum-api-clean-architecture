@@ -18,7 +18,7 @@ jobs:
           POSTGRES_USERNAME: ${{ secrets.PGUSERNAME_TEST }}
           POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
         ports:
-          - ${{ secrets.PGPORT_TEST }}:${{ secrets.PGPORT_TEST }}
+          - ${{ secrets.PGPORT_TEST }}
 
     strategy:
       matrix:
