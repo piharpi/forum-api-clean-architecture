@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          scripts: |
+          script: |
             cd ~/forum-api-clean-architecture
             git pull origin main
             npm install
