@@ -2,7 +2,7 @@ exports.up = (pgm) => {
   pgm.addConstraint(
     "threads",
     "fk_threads.owner_users.id",
-    "FOREIGN KEY(owner) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE"
+    "FOREIGN KEY(owner) REFERENCES users(id)"
   );
 };
 
