@@ -17,18 +17,18 @@ exports.up = (pgm) => {
   pgm.addConstraint(
     "likes",
     "fk_likes.comment_comments.id",
-    "FOREIGN KEY(comment) REFERENCES comments(id) ON DELETE NO ACTION ON UPDATE CASCADE"
+    "FOREIGN KEY(comment) REFERENCES comments(id) ON DELETE CASCADE ON UPDATE CASCADE"
   );
 
   pgm.addConstraint(
     "likes",
     "fk_likes.liked_by_users.id",
-    "FOREIGN KEY(liked_by) REFERENCES users(id) ON DELETE NO ACTION ON UPDATE CASCADE"
+    "FOREIGN KEY(liked_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE"
   );
 };
 
 exports.down = (pgm) => {
-  pgm.dropConstraint("fk_likes.comment_comments.id");
-  pgm.dropConstraint("fk_likes.user_users.id");
+  pgm.dropConstraint("likes", "fk_likes.comment_comments.id");
+  pgm.dropConstraint("likes", "fk_likes.liked_by_users.id");
   pgm.dropTable("likes");
 };
