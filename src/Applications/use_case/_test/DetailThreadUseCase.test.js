@@ -2,6 +2,7 @@ const DetailThread = require("../../../Domains/threads/entities/DetailThread");
 const DetailComment = require("../../../Domains/comments/entities/DetailComment");
 const DetailReply = require("../../../Domains/replies/entities/DetailReply");
 const DetailThreadUseCase = require("../threads/DetailThreadUseCase");
+const LikeRepository = require("../../../Domains/likes/LikeRepository");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const ReplyRepository = require("../../../Domains/replies/ReplyRepository");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
@@ -172,6 +173,7 @@ describe("DetailThreadUseCase", () => {
         id: "comment-123",
         username: "harpi",
         date: "2021-08-08T07:22:33.555Z",
+        like_count: 2,
         is_delete: false,
         content: "isi komentar",
       }),
@@ -179,6 +181,7 @@ describe("DetailThreadUseCase", () => {
         id: "comment-1234",
         username: "mulut_netizen",
         date: "2021-08-08T07:24:33.555Z",
+        like_count: 0,
         is_delete: true,
         content: "isi komentar",
       }),
@@ -265,10 +268,19 @@ describe("DetailThreadUseCase", () => {
         ])
       );
 
+    const mockLikeRepository = new LikeRepository();
+    mockLikeRepository.getTotalLikes = jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        { comment: "comment-123", like_count: 2 },
+        { comment: "comment-1234", like_count: 0 },
+      ])
+    );
+
     const detailThreadUseCase = new DetailThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
       replyRepository: mockReplyRepository,
+      likeRepository: mockLikeRepository,
     });
 
     // Action
@@ -278,18 +290,27 @@ describe("DetailThreadUseCase", () => {
 
     // Assert
     expect(detailThreadUseCaseResult).toBeInstanceOf(DetailThread);
+
     await expect(mockThreadRepository.checkIsThreadAvailable).toBeCalledWith(
       useCasePayload.threadId
     );
+
     await expect(mockThreadRepository.getDetailThreadById).toBeCalledWith(
       useCasePayload.threadId
     );
+
     await expect(
       mockCommentRepository.getAllDetailCommentByThreadId
     ).toBeCalledWith(useCasePayload.threadId);
+
     await expect(
       mockReplyRepository.getAllDetailReplyByThreadAndCommentId
     ).toBeCalledWith(useCasePayload.threadId, [
+      expectDetailAllComment[0].id,
+      expectDetailAllComment[1].id,
+    ]);
+
+    await expect(mockLikeRepository.getTotalLikes).toBeCalledWith([
       expectDetailAllComment[0].id,
       expectDetailAllComment[1].id,
     ]);
