@@ -126,6 +126,18 @@ describe("DomainErrorTranslator", () => {
         new Error("NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION")
       )
     ).toStrictEqual(new InvariantError("content harus string"));
+    expect(
+      DomainErrorTranslator.translate(
+        new Error("TOGGLE_LIKE.NOT_CONTAIN_NEEDED_PROPERTY")
+      )
+    ).toStrictEqual(
+      new InvariantError("harus mengirimkan semua property yang diperlukan")
+    );
+    expect(
+      DomainErrorTranslator.translate(
+        new Error("TOGGLE_LIKE.NOT_MEET_DATA_TYPE_SPECIFICATION")
+      )
+    ).toStrictEqual(new InvariantError("payload harus string"));
   });
 
   it("should return original error when error message is not needed to translate", () => {
