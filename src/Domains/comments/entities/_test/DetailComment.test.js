@@ -9,6 +9,7 @@ describe("DetailComment Entity", () => {
       date: "2021-08-08T07:22:33.555Z",
       content: "sebuah comment",
       is_delete: false,
+      like_count: 2,
     };
 
     // Action
@@ -18,6 +19,7 @@ describe("DetailComment Entity", () => {
     expect(detailComment.id).toEqual("comment-123");
     expect(detailComment.username).toEqual("harpi");
     expect(detailComment.date).toEqual("2021-08-08T07:22:33.555Z");
+    expect(detailComment.likeCount).toEqual(2);
     expect(detailComment.content).toEqual("sebuah comment");
   });
 
@@ -28,6 +30,7 @@ describe("DetailComment Entity", () => {
       username: "harpi",
       date: "2021-08-08T07:22:33.555Z",
       content: "sebuah comment",
+      like_count: 5,
       is_delete: true,
     };
 
@@ -38,6 +41,7 @@ describe("DetailComment Entity", () => {
     expect(detailComment.id).toEqual("comment-123");
     expect(detailComment.username).toEqual("harpi");
     expect(detailComment.date).toEqual("2021-08-08T07:22:33.555Z");
+    expect(detailComment.likeCount).toEqual(5);
     expect(detailComment.content).toEqual("**komentar telah dihapus**");
   });
 
