@@ -1,5 +1,3 @@
-const { type } = require("@hapi/hapi/lib/headers");
-
 class DetailComment {
   constructor(payload) {
     const {

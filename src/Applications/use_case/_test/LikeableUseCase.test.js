@@ -1,4 +1,3 @@
-const { use } = require("bcrypt/promises");
 const ThreadRepository = require("../../../Domains/threads/ThreadRepository");
 const CommentRepository = require("../../../Domains/comments/CommentRepository");
 const LikeRepository = require("../../../Domains/likes/LikeRepository");
