@@ -78,6 +78,12 @@ DomainErrorTranslator._directories = {
   "NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION": new InvariantError(
     "content harus string"
   ),
+  "TOGGLE_LIKE.NOT_CONTAIN_NEEDED_PROPERTY": new InvariantError(
+    "harus mengirimkan semua property yang diperlukan"
+  ),
+  "TOGGLE_LIKE.NOT_MEET_DATA_TYPE_SPECIFICATION": new InvariantError(
+    "payload harus string"
+  ),
 };
 
 module.exports = DomainErrorTranslator;

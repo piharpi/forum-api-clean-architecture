@@ -166,7 +166,7 @@ describe("/threads endpoint", () => {
     });
   });
 
-  describe("DELETE /threads/{threadId}", () => {
+  describe("GET /threads/{threadId}", () => {
     it("should get detail thread correctly", async () => {
       // Arrange
       await UsersTableTestHelper.addUser({});

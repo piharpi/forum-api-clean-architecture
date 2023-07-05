@@ -37,7 +37,7 @@ exports.up = (pgm) => {
   pgm.addConstraint(
     "comments",
     "fk_comments.thread_threads.id",
-    "FOREIGN KEY(thread) REFERENCES threads(id) ON DELETE SET NULL ON UPDATE CASCADE"
+    "FOREIGN KEY(thread) REFERENCES threads(id) ON DELETE NO ACTION ON UPDATE CASCADE"
   );
 };
 

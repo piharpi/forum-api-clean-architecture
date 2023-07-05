@@ -1,3 +1,5 @@
+const { type } = require("@hapi/hapi/lib/headers");
+
 class DetailComment {
   constructor(payload) {
     const {
@@ -7,6 +9,7 @@ class DetailComment {
       id,
       replies,
       is_delete: isDelete,
+      like_count: likeCount,
     } = payload;
 
     this._verifyPayload(payload);
@@ -16,6 +19,7 @@ class DetailComment {
     this.content = isDelete ? "**komentar telah dihapus**" : content;
     this.replies = replies || [];
     this.date = date;
+    this.likeCount = likeCount || 0;
   }
 
   _verifyPayload({
@@ -25,6 +29,7 @@ class DetailComment {
     id,
     is_delete: isDelete,
     replies = [],
+    like_count: likeCount = 0,
   }) {
     if (!id || !content || !username || !date) {
       throw new Error("DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY");
@@ -36,7 +41,8 @@ class DetailComment {
       typeof username !== "string" ||
       typeof date !== "string" ||
       typeof isDelete !== "boolean" ||
-      !Array.isArray(replies)
+      !Array.isArray(replies) ||
+      typeof likeCount !== "number"
     ) {
       throw new Error("DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION");
     }
