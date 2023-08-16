@@ -7,7 +7,7 @@ class PagesHandler {
     return h
       .response({
         status: "success",
-        value: "Hello World!",
+        value: "Homepage",
       })
       .code(200);
   }
