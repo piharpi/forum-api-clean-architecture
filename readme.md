@@ -1,3 +1,6 @@
+[![Continuous Integration](https://github.com/piharpi/forum-api-clean-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/piharpi/forum-api-clean-architecture/actions/workflows/ci.yml)
+[![Continuous Deployment](https://github.com/piharpi/forum-api-clean-architecture/actions/workflows/cd.yml/badge.svg)](https://github.com/piharpi/forum-api-clean-architecture/actions/workflows/cd.yml)
+
 # Forum API Clean Architecture
 
 Implementation clean architecture RESTful API backend NodeJS(hapi.js) & PostgreSQL with TDD methodologies, unit testing,
